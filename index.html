@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Untuk Caca Tersayang</title>
+  <style>
+    /* Loading Screen */
+    #loadingScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      color: #ee9ca7;
+      font-size: 2em;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .loading-flower {
+      width: 60px;
+      height: 60px;
+      background: url('https://files.catbox.moe/620pqe.png') no-repeat center center / contain;
+      animation: spin 2s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+
+    /* Styles utama */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #4a148c;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 3em;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    p {
+      font-size: 1.3em;
+      max-width: 600px;
+      margin: 20px auto;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    .flowers {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .flower {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: url('https://files.catbox.moe/620pqe.png') no-repeat center center / contain;
+      opacity: 1.0;
+      animation: floatDown 10s linear infinite;
+    }
+
+    .menu-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #ee9ca7;
+      font-weight: bold;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .fade-box {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      display: none;
+    }
+
+    .fade-box.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery img {
+      width: 120px;
+      margin: 10px;
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .gallery img.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floatDown {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    #spinBtn {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 15px;
+      background: #fff;
+      color: #ee9ca7;
+      font-weight: bold;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    #spinResult {
+      font-size: 1.4em;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Kado */
+    #kadoContainer {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #fceabb, #f8b500);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #kadoContainer img {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+
+    #kadoContainer img:hover {
+      transform: scale(1.1);
+    }
+
+    #mainContent {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen">
+    <div class="loading-flower"></div>
+    Memuat Cinta untuk Caca...
+  </div>
+
+  <!-- Kado -->
+  <div id="kadoContainer">
+    <h2>pencet aku, Caca~</h2>
+    <img src="https://files.catbox.moe/32yday.png" alt="Kado" onclick="tampilkanHalamanUtama()">
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="bg-music" src="https://files.catbox.moe/eufpfo.mp3" loop autoplay></audio>
+
+  <!-- Bunga -->
+  <div class="flowers" id="flowers"></div>
+
+  <!-- Konten Utama -->
+  <div id="mainContent">
+    <h1>Hai Caca, Cintaku</h1>
+    <p>Jarak boleh jauh, tapi hatiku selalu dekat denganmu.</p>
+
+    <div>
+      <button class="menu-btn" onclick="showSection('gallery')">Galeri Caca</button>
+      <button class="menu-btn" onclick="showSection('jackpot')">Main Spin!</button>
+    </div>
+
+    <!-- Galeri -->
+    <div id="galleryBox" class="fade-box">
+      <h2>Kenangan Indah Bersama Caca</h2>
+      <div class="gallery" id="galleryContainer">
+        <img src="https://files.catbox.moe/tvi4ps.jpg" alt="Caca 1">
+        <img src="https://files.catbox.moe/8to1ck.jpg" alt="Caca 2">
+        <img src="https://files.catbox.moe/6lr1yx.jpg" alt="Caca 3">
+        <img src="https://files.catbox.moe/z0err7.png" alt="Caca 4">
+      </div>
+    </div>
+
+    <!-- Jackpot -->
+    <div id="jackpotBox" class="fade-box">
+      <h2>Putar Roda Cinta</h2>
+      <p><strong>Putar dan lihat keberuntunganmu bersama Caca!</strong></p>
+      <button id="spinBtn" onclick="spinWheel()">pencet aku </button>
+      <p id="spinResult"></p>
+    </div>
+  </div>
+
+  <script>
+    const flowerContainer = document.getElementById('flowers');
+    const spinResult = document.getElementById('spinResult');
+    const galleryImgs = document.querySelectorAll('#galleryContainer img');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const kadoContainer = document.getElementById('kadoContainer');
+    const mainContent = document.getElementById('mainContent');
+
+    function createFlower() {
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * 100 + 'vw';
+      flower.style.animationDuration = (5 + Math.random() * 5) + 's';
+      flower.style.opacity = Math.random();
+      flowerContainer.appendChild(flower);
+      setTimeout(() => flower.remove(), 10000);
+    }
+
+    setInterval(createFlower, 500);
+
+    function showSection(id) {
+      const sections = ['galleryBox', 'jackpotBox'];
+      sections.forEach(sec => {
+        const el = document.getElementById(sec);
+        el.classList.remove('show');
+        setTimeout(() => el.style.display = 'none', 400);
+      });
+
+      const target = document.getElementById(id + 'Box');
+      setTimeout(() => {
+        target.style.display = 'block';
+        void target.offsetWidth;
+        target.classList.add('show');
+      }, 400);
+
+      if (id === 'gallery') {
+        document.body.style.backgroundImage = "url('https://files.catbox.moe/0wrqie.jpeg')";
+        galleryImgs.forEach(img => img.classList.remove('show'));
+        galleryImgs.forEach((img, i) => {
+          setTimeout(() => img.classList.add('show'), i * 500);
+        });
+      } else if (id === 'jackpot') {
+        document.body.style.backgroundImage = "url('https://files.catbox.moe/wqdz7a.jpeg')";
+      } else {
+        document.body.style.backgroundImage = "url('https://files.catbox.moe/z0err7.png')";
+      }
+    }
+
+    function spinWheel() {
+      const hadiah = [
+        'Peluk Virtual dari Aku!',
+        'Cium Manis Lewat Angin~',
+        'cewek idaman ku',
+        'Cinta kita abadi',
+        'typing nya jangan singkat ya',
+        'Kita akan selalu bersama'
+      ];
+      const result = hadiah[Math.floor(Math.random() * hadiah.length)];
+      spinResult.innerText = result;
+      spinResult.style.animation = 'none';
+      void spinResult.offsetWidth;
+      spinResult.style.animation = 'fadeIn 1s ease-in-out';
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        kadoContainer.style.display = 'flex';
+      }, 3000);
+    });
+
+    function tampilkanHalamanUtama() {
+      kadoContainer.style.display = 'none';
+      mainContent.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
